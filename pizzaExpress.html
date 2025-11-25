@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <title>PizzaExpress</title>
+
+    <style>
+        body {
+            background-color: lightcyan;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 30px;
+            font-family: Arial, sans-serif;
+            gap: 30px;
+        }
+        h1 {
+            margin: 0;
+            font-size: 36px;
+        }
+        .divRichiesta {
+            background: white;
+            border: 1px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            width: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        h2 {
+            margin-top: 10px;
+            font-size: 18px;
+        }
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        input {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #777;
+        }
+        button {
+            padding: 12px;
+            background: pink;
+            border: 2px solid rosybrown;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        button:hover {
+            background: deeppink;
+        }
+        #btnDelete {
+            background: #c33;
+            border-color: #a00;
+        }
+        #btnDelete:hover {
+            background: red;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1><b>Pizza Express</b></h1>
+</header>
+
+<div class="divRichiesta" id="cercaPizze">
+    <form>
+        <h2>GET - Cerca Pizza</h2>
+        <button type="submit" id="btnGet">Cerca</button>
+    </form>
+</div>
+
+<div class="divRichiesta" id="aggiungiPizze">
+    <form>
+        <h2>POST - Aggiungi Pizza</h2>
+        <input type="text" name="id" placeholder="ID pizza">
+        <input type="text" name="nuovoNome" placeholder="Nuovo nome">
+        <input type="number" name="nuovoPrezzo" placeholder="Prezzo">
+        <button type="submit" id="btnPost">Aggiungi</button>
+    </form>
+</div>
+
+<div class="divRichiesta" id="richiediPizze">
+    <form>
+        <h2>PUT - Aggiorna Prezzo</h2>
+        <input type="text" name="id" placeholder="ID pizza">
+        <input type="number" name="prezzo" placeholder="Prezzo">
+        <button type="submit" id="btnPut">Aggiorna</button>
+    </form>
+</div>
+
+<div class="divRichiesta" id="cancellaPizze">
+    <form>
+        <h2>DELETE - Elimina Pizza</h2>
+        <input type="text" name="id" placeholder="ID pizza">
+        <button type="submit" id="btnDelete">Elimina</button>
+    </form>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
