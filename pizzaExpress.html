@@ -2,114 +2,329 @@
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <title>PizzaExpress</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza API Tester</title>
     <style>
         body {
-            background-color: lightcyan;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            padding-top: 30px;
-            font-family: Arial, sans-serif;
-            gap: 30px;
-        }
-        h1 {
-            margin: 0;
-            font-size: 36px;
-        }
-        .divRichiesta {
-            background: white;
-            border: 1px solid #333;
-            border-radius: 10px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e6fff1;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
             padding: 20px;
-            width: 300px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-        }
-        h2 {
-            margin-top: 10px;
-            font-size: 18px;
-        }
-        form {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        input {
-            padding: 8px;
-            border-radius: 5px;
-            border: 1px solid #777;
-        }
-        button {
-            padding: 12px;
-            background: pink;
-            border: 2px solid rosybrown;
-            border-radius: 5px;
-            cursor: pointer;
-            color: white;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-        button:hover {
-            background: deeppink;
-        }
-        #btnDelete {
-            background: #c33;
-            border-color: #a00;
-        }
-        #btnDelete:hover {
-            background: red;
         }
 
+        h1 { text-align: center; color: #444; }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .dropbtn {
+            background-color: #ff3fdf;
+            color: white;
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .dropbtn:hover { background-color: #b4209c; }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #fde5f3;
+            min-width: 200px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 5px;
+        }
+
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+
+        .dropdown-content a:hover { background-color: #ddd; }
+        .show { display: block; }
+        .form-container {
+            display: none; /* Nascosti di default */
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .form-container.active { display: block; }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            display: inline-block;
+            border: 1px solid #fdccff;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            background-color: #ff3fdf;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover { background-color: #b4209c; }
+        .divOutput {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 8px;
+            min-height: 100px;
+            overflow-x: auto;
+        }
+
+        .outputMessage h2 {
+            font-size: 1.2em;
+            color: #2c3e50;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        pre {
+            background-color: #f8f8f8;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
     </style>
 </head>
-
 <body>
 
-<header>
-    <h1><b>Pizza Express</b></h1>
-</header>
+    <h1>🍕 Gestione Pizze API</h1>
 
-<div class="divRichiesta" id="cercaPizze">
-    <form>
-        <h2>GET - Cerca Pizza</h2>
-        <button type="submit" id="btnGet">Cerca</button>
+    <div class="dropdown">
+        <button class="dropbtn">Seleziona Operazione ▼</button>
+        <div class="dropdown-content">
+            <a href="#" data-form="getForm">GET - Lista Pizze</a>
+            <a href="#" data-form="setForm">POST - Nuova Pizza</a>
+            <a href="#" data-form="putForm">PUT - Modifica Prezzo</a>
+            <a href="#" data-form="deleteForm">DELETE - Elimina Pizza</a>
+        </div>
+    </div>
+
+    <form id="getForm" class="form-container active">
+        <h3>Recupera tutte le pizze</h3>
+        <p>Clicca sotto per vedere la lista completa.</p>
+        <button type="submit">Esegui GET</button>
     </form>
-</div>
 
-<div class="divRichiesta" id="aggiungiPizze">
-    <form>
-        <h2>POST - Aggiungi Pizza</h2>
-        <input type="text" name="id" placeholder="ID pizza">
-        <input type="text" name="nuovoNome" placeholder="Nuovo nome">
-        <input type="number" name="nuovoPrezzo" placeholder="Prezzo">
-        <button type="submit" id="btnPost">Aggiungi</button>
+    <form id="setForm" class="form-container">
+        <h3>Aggiungi Nuova Pizza</h3>
+        <label>Nome Pizza:</label>
+        <input type="text" name="nuovoNome" placeholder="Es. Margherita" required>
+        <label>Prezzo (€):</label>
+        <input type="number" name="nuovoPrezzo" step="0.50" placeholder="Es. 5.50" required>
+        <button type="submit">Esegui POST</button>
     </form>
-</div>
 
-<div class="divRichiesta" id="richiediPizze">
-    <form>
-        <h2>PUT - Aggiorna Prezzo</h2>
-        <input type="text" name="id" placeholder="ID pizza">
-        <input type="number" name="prezzo" placeholder="Prezzo">
-        <button type="submit" id="btnPut">Aggiorna</button>
+    <form id="putForm" class="form-container">
+        <h3>Aggiorna Prezzo Pizza</h3>
+        <label>ID Pizza:</label>
+        <input type="number" name="id" placeholder="ID della pizza da modificare" required>
+        <label>Nuovo Prezzo (€):</label>
+        <input type="number" name="prezzo" step="0.50" placeholder="Es. 8.00" required>
+        <button type="submit">Esegui PUT</button>
     </form>
-</div>
 
-<div class="divRichiesta" id="cancellaPizze">
-    <form>
-        <h2>DELETE - Elimina Pizza</h2>
-        <input type="text" name="id" placeholder="ID pizza">
-        <button type="submit" id="btnDelete">Elimina</button>
+    <form id="deleteForm" class="form-container">
+        <h3>Elimina Pizza</h3>
+        <label>ID Pizza:</label>
+        <input type="number" name="id" placeholder="ID della pizza da eliminare" required>
+        <button type="submit" style="background-color: #e74c3c;">Esegui DELETE</button>
     </form>
-</div>
 
-<script src="script.js"></script>
+    <div class="divOutput">
+        <p style="color: #888;">I risultati appariranno qui...</p>
+    </div>
+
+    <script>
+        // --- IL TUO CODICE JS INCOLLATO QUI ---
+
+        // Costanti
+        const API_URL = "http://localhost:7297/api/pizze";
+        const dropdownButton = document.querySelector(".dropbtn");
+        const dropdownContent = document.querySelector(".dropdown-content");
+        const forms = document.querySelectorAll(".form-container");
+        const output = document.querySelector(".divOutput");
+        const formGet = document.getElementById("getForm");
+        const formPost = document.getElementById("setForm");
+        const formPut = document.getElementById("putForm");
+        const formDelete = document.getElementById("deleteForm");
+
+        /**
+         * Funzione per mostrare l'output nella UI.
+         */
+        function showOutput(title, data = null) {
+            output.innerHTML = `
+                <div class="outputMessage">
+                    <h2>${title}</h2>
+                    ${data ? `<pre>${JSON.stringify(data, null, 2)}</pre>` : ""}
+                </div>
+            `;
+        }
+
+        /**
+         * Funzione di utilità per gestire tutte le chiamate API con fetch.
+         */
+        async function apiCall(url, options = {}) {
+            try {
+                const res = await fetch(url, options);
+
+                if (!res.ok) {
+                    const errorText = await res.text();
+                    let errorMessage = `Errore HTTP ${res.status}: ${res.statusText}`;
+                    try {
+                        const errorJson = JSON.parse(errorText);
+                        errorMessage = errorJson.detail || JSON.stringify(errorJson, null, 2);
+                    } catch {
+                        if (errorText.trim().length > 0) {
+                            errorMessage = errorText;
+                        }
+                    }
+                    throw new Error(errorMessage);
+                }
+
+                const text = await res.text();
+                return text ? JSON.parse(text) : null;
+            } catch (err) {
+                throw new Error(`Errore di rete/API: ${err.message}`);
+            }
+        }
+
+        // ----------------------------------------------------
+        // Gestione Interfaccia Utente (Dropdown e Forms)
+        // ----------------------------------------------------
+
+        dropdownButton.addEventListener("click", e => {
+            e.preventDefault();
+            dropdownContent.classList.toggle("show");
+        });
+
+        document.querySelectorAll(".dropdown-content a").forEach(link => {
+            link.addEventListener("click", e => {
+                e.preventDefault();
+
+                forms.forEach(f => f.classList.remove("active"));
+                const form = document.getElementById(link.dataset.form);
+                if (form) form.classList.add("active");
+
+                dropdownContent.classList.remove("show");
+                
+                // Opzionale: Pulisce l'output quando cambi form
+                output.innerHTML = '<p style="color: #888;">Pronto per una nuova operazione...</p>';
+            });
+        });
+
+        document.addEventListener("click", e => {
+            if (!e.target.closest(".dropdown")) {
+                dropdownContent.classList.remove("show");
+            }
+        });
+
+        // ----------------------------------------------------
+        // Gestione Form API (CRUD)
+        // ----------------------------------------------------
+
+        // GET
+        formGet.addEventListener("submit", async e => {
+            e.preventDefault();
+            try {
+                const data = await apiCall(API_URL);
+                showOutput("GET eseguito con successo! (Tutte le pizze)", data);
+            } catch (err) {
+                showOutput("Errore GET:", err.message);
+            }
+        });
+
+        // POST
+        formPost.addEventListener("submit", async e => {
+            e.preventDefault();
+            const formData = new FormData(formPost);
+            const pizza = {
+                nome: formData.get("nuovoNome"),
+                prezzo: Number(formData.get("nuovoPrezzo")),
+            };
+            
+            if (!pizza.nome || isNaN(pizza.prezzo)) {
+                return showOutput("Errore POST:", "Nome mancante o Prezzo non valido.");
+            }
+
+            try {
+                const data = await apiCall(API_URL, {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(pizza)
+                });
+                showOutput("POST eseguito con successo! (Nuova pizza creata)", data);
+                formPost.reset(); 
+            } catch (err) {
+                showOutput("Errore POST:", err.message);
+            }
+        });
+
+        // PUT
+        formPut.addEventListener("submit", async e => {
+            e.preventDefault();
+            const formData = new FormData(formPut);
+            const id = formData.get("id");
+            const prezzo = Number(formData.get("prezzo")); 
+            
+            if (!id || isNaN(prezzo)) {
+                return showOutput("Errore PUT:", "ID mancante o Prezzo non valido!");
+            }
+
+            const updateBody = { prezzo }; 
+
+            try {
+                const data = await apiCall(`${API_URL}/${id}`, {
+                    method: "PUT",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify(updateBody)
+                });
+                
+                showOutput("PUT eseguito con successo!", data || `Pizza con ID ${id} aggiornata.`);
+                formPut.reset();
+            } catch (err) {
+                showOutput("Errore PUT:", err.message);
+            }
+        });
+
+        // DELETE
+        formDelete.addEventListener("submit", async e => {
+            e.preventDefault();
+            const id = formDelete.querySelector('input[name="id"]').value;
+
+            if (!id)
+                return showOutput("Errore DELETE:", "Inserisci un ID!");
+
+            try {
+                await apiCall(`${API_URL}/${id}`, { method: "DELETE" });
+                showOutput("DELETE eseguito con successo!", `Pizza con ID ${id} eliminata.`);
+                formDelete.reset();
+            } catch (err) {
+                showOutput("Errore DELETE:", err.message);
+            }
+        });
+    </script>
 </body>
 </html>
